@@ -4,7 +4,7 @@
 #include "disp.h"
 #include <assert.h>
 
-#define INFILE1 "rectsss"
+#define INFILE1 "rects"
 #define OUTFILE1 "output.ppm"
 
 
@@ -15,14 +15,8 @@ int render() {
 	display->init();
 
 	FILE *infile, *outfile;
-	if ((infile = fopen(INFILE1, "r")) == NULL) {
-		printf("Cannot open input file.\n");
-		return 0;
-	}
-	if ((outfile = fopen(OUTFILE1, "wb")) == NULL) {
-		printf("Cannot open output file.\n");
-		return 0;
-	}
+	assert((infile = fopen(INFILE1, "r")) != NULL);
+	assert((outfile = fopen(OUTFILE1, "wb")) != NULL);
 
 	int	ulx, uly, lrx, lry, r, g, b;
 	while (fscanf(infile, "%d %d %d %d %d %d %d",
@@ -39,7 +33,6 @@ int render() {
 	fclose(infile);
 	fclose(outfile);
 	delete display;
-
 	return 0;
 }
 
