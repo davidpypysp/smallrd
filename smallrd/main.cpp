@@ -45,5 +45,6 @@ int main(int argc, char *argv[]) {
 	}
 	*/
 	render();
+	system("pause");
 	return 0;
 }
