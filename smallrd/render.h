@@ -2,8 +2,8 @@
 #define SMALLRD_RENDER_H_
 
 #include "my_math.h"
+#include "display.h"
 
-class Display;
 
 namespace smallrd {
 
@@ -11,6 +11,9 @@ class Render {
 public:
 	Render(Display *display);
 	void BeginRender();
+	void PutTriangle(Vector *vertex_list, Vector *normal_list = NULL, Vector *uv_list = NULL);
+	
+	inline void set_flat_color(const Vector color) { flat_color_ = color; }
 
 
 private:
