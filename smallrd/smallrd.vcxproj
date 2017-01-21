@@ -113,10 +113,14 @@
   <ItemGroup>
     <ClCompile Include="display.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="my_math.cpp" />
+    <ClCompile Include="render.cpp" />
     <ClCompile Include="renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="display.h" />
+    <ClInclude Include="my_math.h" />
+    <ClInclude Include="render.h" />
     <ClInclude Include="utility.h" />
     <ClInclude Include="renderer.h" />
   </ItemGroup>

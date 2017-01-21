@@ -1,6 +1,7 @@
 #include "renderer.h"
 #include <assert.h>
 #include "display.h"
+#include "render.h"
 
 namespace smallrd {
 
@@ -9,7 +10,8 @@ Renderer::Renderer(const int width, const int height) : width_(width), height_(h
 
 void Renderer::RenderScene() {
 	Display *display = new Display(width_, height_);
-	display->Init();
+	Render *render = new Render(display);
+	render->BeginRender();
 
 	FILE *in_file, *out_file;
 	assert((in_file = fopen(kInFileName, "r")) != NULL);
