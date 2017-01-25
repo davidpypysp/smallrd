@@ -10,12 +10,10 @@ namespace smallrd {
 class Render {
 public:
 	Render(Display *display);
+	~Render();
 	void BeginRender();
 	void PutTriangle(Vector *vertex_list, Vector *normal_list, Vector *uv_list = NULL);
 	
-	inline void set_flat_color(const Vector color) { flat_color_ = color; }
-
-
 private:
 	static const int kMaxMatrixLevels = 10;
 	Display *display_;
@@ -33,11 +31,11 @@ private:
 	float spec_;
 	// Todo: tex_func
 
-	Vector Shade2(const Vector normal);
+	Vector Shade2(const Vector &normal);
 	void ScanLineAlgorithm(Vector *vertex_list);
-	inline Vector IncreaseByY(const Vector vertex, const double slope_x, const double slope_z, const double y);
-	void InterpolateByX(const Vector vertex1, const Vector vertex2);
-	inline void SetPixelZBuffer(const Vector vertex);
+	inline Vector& IncreaseByY(const double slope_x, const double slope_z, const double y, Vector &vertex);
+	void InterpolateByX(const Vector &vertex1, const Vector &vertex2);
+	inline void SetPixelZBuffer(const Vector &vertex);
 	
 
 

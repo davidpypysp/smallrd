@@ -5,6 +5,10 @@ namespace smallrd {
 Render::Render(Display *display) : display_(display) {
 }
 
+Render::~Render() {
+	delete display_;
+}
+
 void Render::BeginRender() {
 	display_->Init();
 }
@@ -12,12 +16,11 @@ void Render::BeginRender() {
 void Render::PutTriangle(Vector *vertex_list, Vector *normal_list, Vector *uv_list) {
 	flat_color_ = Shade2(normal_list[0]);
 	ScanLineAlgorithm(vertex_list);
-	
-
 }
 
-Vector Render::Shade2(const Vector normal) {
-	Vector	light(0.707, 0.5, 0.5);
+
+Vector Render::Shade2(const Vector &normal) {
+	Vector light(0.707, 0.5, 0.5);
 	double coeffcient = light * normal;
 
 	coeffcient = abs(coeffcient);
@@ -28,11 +31,6 @@ Vector Render::Shade2(const Vector normal) {
 }
 
 void Render::ScanLineAlgorithm(Vector *vertex_list) {
-	// 3 vertices in one line
-	if (vertex_list[0].y == vertex_list[1].y && vertex_list[1].y == vertex_list[2].y) {
-		return;
-	}
-
 	int max_index = 0, min_index = 0;
 	for (int i = 1; i < 3; i++) {
 		if (vertex_list[i].y < vertex_list[min_index].y ||
@@ -49,6 +47,12 @@ void Render::ScanLineAlgorithm(Vector *vertex_list) {
 	Vector &min_vertex = vertex_list[min_index];
 	Vector &mid_vertex = vertex_list[3 - max_index - min_index];
 	Vector &max_vertex = vertex_list[max_index];
+
+	// 3 vertices in same line case
+	if (min_index == max_index) {
+		if (min_vertex.y == ceil(min_vertex.y)) InterpolateByX(min_vertex, max_vertex);
+		return;
+	}
 
 	// do interpolation along y
 	Vector &line1_down_vertex = min_vertex, &line1_up_vertex = max_vertex;
@@ -72,21 +76,23 @@ void Render::ScanLineAlgorithm(Vector *vertex_list) {
 			switch_line_flag = true;
 		}
 
-		current_vertex1 = IncreaseByY(current_vertex1, line1_slope_x, line1_slope_z, y);
-		current_vertex2 = IncreaseByY(current_vertex2, line2_slope_x, line2_slope_z, y);
-
+		IncreaseByY(line1_slope_x, line1_slope_z, y, current_vertex1);
+		IncreaseByY(line2_slope_x, line2_slope_z, y, current_vertex2);
 		InterpolateByX(current_vertex1, current_vertex2);
 	}
 
 
 }
 
-inline Vector Render::IncreaseByY(const Vector vertex, const double slope_x, const double slope_z, const double y) {
+inline Vector& Render::IncreaseByY(const double slope_x, const double slope_z, const double y, Vector &vertex) {
 	double delta_y = y - vertex.y;
-	return Vector(vertex.x + slope_x * delta_y, y, vertex.z + slope_z * delta_y);
+	vertex.x += slope_x * delta_y;
+	vertex.y = y;
+	vertex.z += slope_z * delta_y;
+	return vertex;
 }
 
-void Render::InterpolateByX(const Vector vertex1, const Vector vertex2) {
+void Render::InterpolateByX(const Vector &vertex1, const Vector &vertex2) {
 	if(vertex1.x > vertex2.x) { //keep left to right order
 		InterpolateByX(vertex2, vertex1);
 		return;
@@ -105,7 +111,7 @@ void Render::InterpolateByX(const Vector vertex1, const Vector vertex2) {
 	}
 }
 
-inline void Render::SetPixelZBuffer(const Vector vertex) {
+inline void Render::SetPixelZBuffer(const Vector &vertex) {
 	Pixel pixel = display_->GetPixel(vertex.x, vertex.y);
 	if (vertex.z <= (double)pixel.z) {
 		pixel.z = vertex.z;

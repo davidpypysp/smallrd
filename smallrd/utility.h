@@ -20,7 +20,7 @@ inline int ArrayIndex(const int x, const int y, const int col) {
 	return x + y * col;
 }
 
-inline short ColorToShortType(double color) {
+inline short ColorToShortType(const double color) {
 	return (short)((int)(color * ((1 << 12) - 1)));
 }
 

@@ -66,8 +66,7 @@ void Renderer::RenderScene2() {
 
 	fclose(in_file);
 	fclose(out_file);
-	delete display;
-
+	delete render;
 }
 
 	

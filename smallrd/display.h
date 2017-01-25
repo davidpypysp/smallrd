@@ -8,20 +8,20 @@
 namespace smallrd {
 
 struct Pixel {
-	double r, g, b, a;
+	short r, g, b, a;
 	int z;
 
-	Pixel(double r = 0.0, double g = 0.0, double b = 0.0, double a = 0.0, int z = 0);
+	Pixel(const short r = 0.0, const short g = 0.0, const short b = 0.0, const short a = 0.0, const int z = 0);
 };
 
 class Display {
 public:
-	Display(int xres = 0, int yres = 0);
+	Display(const int xres, const int yres);
 
 	void Init();
 
-	void SetPixel(const int x, const int y, const Pixel pixel);
-	Pixel GetPixel(const int x, const int y);
+	void SetPixel(const int x, const int y, const Pixel &pixel);
+	Pixel& GetPixel(const int x, const int y);
 	void FlushToFile(FILE* out_file);
 
 private:

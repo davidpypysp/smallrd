@@ -2,10 +2,10 @@
 
 namespace smallrd {
 
-Pixel::Pixel(double r, double g, double b, double a, int z) : r(r), g(g), b(b), a(a), z(z) {
+Pixel::Pixel(const short r, const short g, const short b, const short a, const int z) : r(r), g(g), b(b), a(a), z(z) {
 }
 
-Display::Display(int xres, int yres) {
+Display::Display(const int xres, const int yres) {
 	xres_ = ClampValue(xres, 0, kMaxXRes);
 	yres_ = ClampValue(yres, 0, kMaxYRes);
 	frame_buf_ = new Pixel[yres_ * xres_];
@@ -13,8 +13,8 @@ Display::Display(int xres, int yres) {
 
 void Display::Init() {
 	// background color: steel blue 2
-	//double r = ColorToShortType(92.0 / 255.0), g = ColorToShortType(172.0 / 255.0), b = ColorToShortType(238.0 / 255.0);
-	double r = 0, g = 0, b = 0;
+	short r = ColorToShortType(92.0 / 255.0), g = ColorToShortType(172.0 / 255.0), b = ColorToShortType(238.0 / 255.0);
+	//short r = 0, g = 0, b = 0;
 	for (int i = 0; i < xres_ * yres_; ++i) {
 		frame_buf_[i].r = r;
 		frame_buf_[i].g = g;
@@ -24,11 +24,11 @@ void Display::Init() {
 	}
 }
 
-void Display::SetPixel(const int x, const int y, const Pixel pixel) {
+void Display::SetPixel(const int x, const int y, const Pixel &pixel) {
 	if (InBound(x, 0, xres_) && InBound(y, 0, yres_)) frame_buf_[ArrayIndex(x, y, xres_)] = pixel;
 }
 
-Pixel Display::GetPixel(const int x, const int y) {
+Pixel& Display::GetPixel(const int x, const int y) {
 	if (InBound(x, 0, xres_) && InBound(y, 0, yres_)) return frame_buf_[ArrayIndex(x, y, xres_)];
 	return Pixel(0.0, 0.0, 0.0, 0.0, 0);
 }
