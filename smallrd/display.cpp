@@ -12,7 +12,16 @@ Display::Display(int xres, int yres) {
 }
 
 void Display::Init() {
-	memset(frame_buf_, 0, sizeof(Pixel) * yres_ * xres_);
+	// background color: steel blue 2
+	//double r = ColorToShortType(92.0 / 255.0), g = ColorToShortType(172.0 / 255.0), b = ColorToShortType(238.0 / 255.0);
+	double r = 0, g = 0, b = 0;
+	for (int i = 0; i < xres_ * yres_; ++i) {
+		frame_buf_[i].r = r;
+		frame_buf_[i].g = g;
+		frame_buf_[i].b = b;
+		frame_buf_[i].a = 1;
+		frame_buf_[i].z = INT_MAX;
+	}
 }
 
 void Display::SetPixel(const int x, const int y, const Pixel pixel) {

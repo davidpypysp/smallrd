@@ -34,6 +34,44 @@ void Renderer::RenderScene() {
 	delete display;
 }
 
+void Renderer::RenderScene2() {
+	Display *display = new Display(width_, height_);
+	Render *render = new Render(display);
+	render->BeginRender();
+
+	FILE *in_file, *out_file;
+	assert((in_file = fopen(kInFileName2, "r")) != NULL);
+	assert((out_file = fopen(kOutFileName2, "wb")) != NULL);
+
+	char dummy[256];
+	Vector vertex_list[3], normal_list[3], uv_list[3];
+	while (fscanf(in_file, "%s", dummy) == 1) { 	/* read in tri word */
+		fscanf(in_file, "%lf %lf %lf %lf %lf %lf %lf %lf",
+			&(vertex_list[0].x), &(vertex_list[0].y), &(vertex_list[0].z),
+			&(normal_list[0].x), &(normal_list[0].y), &(normal_list[0].z),
+			&(uv_list[0].x), &(uv_list[0].y));
+		fscanf(in_file, "%lf %lf %lf %lf %lf %lf %lf %lf",
+			&(vertex_list[1].x), &(vertex_list[1].y), &(vertex_list[1].z),
+			&(normal_list[1].x), &(normal_list[1].y), &(normal_list[1].z),
+			&(uv_list[1].x), &(uv_list[1].y));
+		fscanf(in_file, "%lf %lf %lf %lf %lf %lf %lf %lf",
+			&(vertex_list[2].x), &(vertex_list[2].y), &(vertex_list[2].z),
+			&(normal_list[2].x), &(normal_list[2].y), &(normal_list[2].z),
+			&(uv_list[2].x), &(uv_list[2].y));
+
+		render->PutTriangle(vertex_list, normal_list);
+	}
+
+	display->FlushToFile(out_file);
+
+	fclose(in_file);
+	fclose(out_file);
+	delete display;
+
+}
+
+	
+
 } // namespace smallrd
 
 

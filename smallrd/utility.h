@@ -20,6 +20,10 @@ inline int ArrayIndex(const int x, const int y, const int col) {
 	return x + y * col;
 }
 
+inline short ColorToShortType(double color) {
+	return (short)((int)(color * ((1 << 12) - 1)));
+}
+
 } //namespace smallrd
 
 

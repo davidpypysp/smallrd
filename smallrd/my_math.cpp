@@ -7,9 +7,6 @@ using std::begin;
 
 namespace smallrd {
 
-Vector::Vector(const double x, const double y, const double z) : x(x), y(y), z(z) {
-}
-
 Matrix::Matrix() {
 	memset(this->value, 0, sizeof(this->value));
 }

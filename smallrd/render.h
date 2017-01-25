@@ -11,7 +11,7 @@ class Render {
 public:
 	Render(Display *display);
 	void BeginRender();
-	void PutTriangle(Vector *vertex_list, Vector *normal_list = NULL, Vector *uv_list = NULL);
+	void PutTriangle(Vector *vertex_list, Vector *normal_list, Vector *uv_list = NULL);
 	
 	inline void set_flat_color(const Vector color) { flat_color_ = color; }
 
@@ -33,6 +33,12 @@ private:
 	float spec_;
 	// Todo: tex_func
 
+	Vector Shade2(const Vector normal);
+	void ScanLineAlgorithm(Vector *vertex_list);
+	inline Vector IncreaseByY(const Vector vertex, const double slope_x, const double slope_z, const double y);
+	void InterpolateByX(const Vector vertex1, const Vector vertex2);
+	inline void SetPixelZBuffer(const Vector vertex);
+	
 
 
 

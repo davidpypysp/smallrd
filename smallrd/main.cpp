@@ -25,9 +25,9 @@ void MyTest() {
 int main(int argc, char *argv[]) {
 
 	MyTest();
-
-	smallrd::Renderer renderer(512, 512);
+	smallrd::Renderer renderer(256, 256);
 	renderer.RenderScene();
+	renderer.RenderScene2();
 	system("pause");
 	return 0;
 }
