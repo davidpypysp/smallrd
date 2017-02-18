@@ -1,6 +1,7 @@
 #ifndef SMALLRD_UTILITY_H_
 #define SMALLRD_UTILITY_H_
 
+
 namespace smallrd {
 
 template <typename T>

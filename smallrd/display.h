@@ -24,8 +24,12 @@ public:
 	Pixel& GetPixel(const int x, const int y);
 	void FlushToFile(FILE* out_file);
 
+	int x_resolution() const { return x_resolution_; }
+	int y_resolution() const { return y_resolution_; }
+
+
 private:
-	int xres_, yres_;
+	int x_resolution_, y_resolution_;
 	Pixel *frame_buf_;
 	const int kMaxXRes = 1024, kMaxYRes = 1024;
 

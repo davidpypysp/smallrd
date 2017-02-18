@@ -75,6 +75,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -111,15 +112,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="display.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="my_math.cpp" />
     <ClCompile Include="render.cpp" />
     <ClCompile Include="renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera.h" />
     <ClInclude Include="display.h" />
-    <ClInclude Include="my_math.h" />
+    <ClInclude Include="light.h" />
+    <ClInclude Include="math\basic.h" />
+    <ClInclude Include="math\matrix.h" />
+    <ClInclude Include="math\quaternion.h" />
+    <ClInclude Include="math\vector.h" />
     <ClInclude Include="render.h" />
     <ClInclude Include="utility.h" />
     <ClInclude Include="renderer.h" />

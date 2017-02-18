@@ -9,10 +9,12 @@ public:
 
     void RenderScene();
     void RenderScene2();
+    void RenderScene3();
 
 private:
     const char *kInFileName = "rects", *kOutFileName = "output.ppm";
     const char *kInFileName2 = "pot4.screen.asc", *kOutFileName2 = "output2.ppm";
+    const char *kInFileName3 = "pot4.asc", *kOutFileName3 = "output3.ppm";
     int width_, height_;
 };
 
