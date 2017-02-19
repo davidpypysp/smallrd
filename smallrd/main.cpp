@@ -34,9 +34,10 @@ int main(int argc, char *argv[]) {
 
 	MyTest();
 	smallrd::Renderer renderer(256, 256);
-	renderer.RenderScene();
+	//renderer.RenderScene();
 	//renderer.RenderScene2();
-	renderer.RenderScene3();
+	//renderer.RenderScene3();
+	renderer.RenderScene4();
 	system("pause");
 	return 0;
 }

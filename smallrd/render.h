@@ -25,6 +25,14 @@ public:
 	void PutTriangle(Vector *vertex_list, Vector *normal_list, Vector *uv_list = NULL);
 	bool PushMatrix(const Matrix &matrix);
 	bool PopMatrix();
+	void AddLight(const Light &light);
+	inline void set_camera(const Camera &camera) { camera_ = camera; }
+	inline void set_ambient_light(const Light &light) { ambient_light_ = light; }
+	inline void set_ka(const Vector &ka) { ka_ = ka; }
+	inline void set_kd(const Vector &kd) { kd_ = kd; }
+	inline void set_ks(const Vector &ks) { ks_ = ks; }
+	inline void set_spec(const double spec) { spec_ = spec; }
+	inline void set_interpolation_mode(const int mode) { interpolation_mode_ = mode; }
 	
 private:
 	static const int kMaxMatrixLevels = 10;
@@ -41,7 +49,7 @@ private:
 	Light lights_[kMaxLights];
 	Light ambient_light_;
 	Vector ka_, kd_, ks_;
-	float spec_;
+	double spec_;
 	// Todo: tex_func
 
 	Vector Shade2(const Vector &normal);

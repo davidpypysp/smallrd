@@ -57,7 +57,7 @@ bool Render::PushMatrix(const Matrix &matrix) {
 	x_image_[matrix_level_ + 1] = x_image_[matrix_level_] * matrix;
 
 	//x_norm_ setting
-	if (matrix_level_ <= 2) {
+	if (matrix_level_ < 2) {
 		x_norm_[matrix_level_ + 1].Identify();
 	} else {
 		Matrix rotation_only = matrix;
@@ -79,6 +79,11 @@ bool Render::PopMatrix() {
 	if (matrix_level_ <= 0) return false;
 	--matrix_level_;
 	return true;
+}
+
+void Render::AddLight(const Light &light) {
+	if (num_lights_ < kMaxLights) 
+		lights_[num_lights_++] = light;
 }
 
 Vector Render::Shade2(const Vector &normal) {
@@ -236,7 +241,7 @@ Vector Render::ShadeEquation(const Vector &normal) {
 		s = s + light.color * pow(r_dot_e, spec_);
 		d = d + light.color * n_dot_l;
 	}
-	return ks_ * s + kd_ * d + ka_ * ambient_light_.color;
+	return ks_.Multiply(s) + kd_.Multiply(d) + ka_.Multiply(ambient_light_.color);
 }
 
 Quaternion Render::InterpolateValuePlane(Vector *point_list) {
@@ -250,9 +255,10 @@ Quaternion Render::InterpolateValuePlane(Vector *point_list) {
 Vector Render::GetValueByPlane(const double x, const double y, Quaternion *plane_list) {
 	//quaternion coefficient: A = x B = y C = z D = w
 	Vector result;
-	for (int i = 0; i < 3; ++i) 
+	for (int i = 0; i < 3; ++i)
 		result[i] = -(plane_list[i].w + plane_list[i].x * x + plane_list[i].y * y) / plane_list[i].z;
 	return result;
+}
 
 
 
