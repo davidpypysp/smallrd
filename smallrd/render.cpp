@@ -2,10 +2,22 @@
 
 namespace smallrd {
 
-Render::Render(Display *display)
+Render::Render()
+	: display_(NULL),
+	  camera_(Vector(), Vector(), Vector(), 0.0),
+	  texture_(NULL),
+	  sample_renders_(NULL) {
+}
+
+	Render::Render(Display *display)
 	: display_(display),
 	  camera_(Vector(-10.0, 5.0, -10.0), Vector(0.0, 0.0, 0.0), Vector(0.0, 1.0, 0.0), 35.0),
-	  texture_(NULL) {
+	  interpolation_mode_(kFlat),
+	  num_lights_(0),
+	  texture_(NULL),
+	  aa_flag_(false),
+	  sample_renders_(NULL),
+	  sample_render_flag_(false) {
 	double kHalfXs = display_->x_resolution() / 2.0, kHalfYs = display_->y_resolution() / 2.0;
 	x_sp_ = {
 		{ kHalfXs, 0.0, 0.0, kHalfXs },
@@ -14,8 +26,6 @@ Render::Render(Display *display)
 		{ 0.0, 0.0, 0.0, 1.0 }
 	};
 
-	interpolation_mode_ = kFlat;
-	num_lights_ = 0;
 	ka_ = { 0.1, 0.1, 0.1 };
 	kd_ = { 0.7, 0.6, 0.5 };
 	ks_ = { 0.2, 0.3, 0.4 };
@@ -23,7 +33,9 @@ Render::Render(Display *display)
 }
 
 Render::~Render() {
-	delete display_;
+	if(display_ != NULL) delete display_;
+	if(!sample_render_flag_ && texture_ != NULL) delete texture_;
+	if (aa_flag_ && sample_renders_ != NULL) delete[] sample_renders_;
 }
 
 void Render::BeginRender() {
@@ -41,12 +53,23 @@ void Render::BeginRender() {
 }
 
 void Render::PutTriangle(Vector *vertex_list, Vector *normal_list, Vector *uv_list) {
+	if (aa_flag_) { // aa sampling 
+		for (int i = 0; i < kSamplingNum; ++i) {
+			sample_renders_[i].PutTriangle(vertex_list, normal_list, uv_list);
+		}
+		return;
+	}
+
 	if(interpolation_mode_ == kFlat) flat_color_ = Shade2(normal_list[0]);
 
 	Vector screen_vertex_list[3], image_normal_list[3], image_uv_list[3];
 	for (int i = 0; i < 3; ++i) {
 		screen_vertex_list[i] = (x_image_[matrix_level_] * Quaternion(vertex_list[i])).ToVector();
 		if (screen_vertex_list[i].z < 0) return; // Skip any triangle with a negative screen-z vertex
+		if (sample_render_flag_) {
+			screen_vertex_list[i].x -= x_offset_;
+			screen_vertex_list[i].y -= y_offset_;
+		}
 		image_normal_list[i] = (x_norm_[matrix_level_] * Quaternion(normal_list[i])).ToVector();
 		image_uv_list[i] = uv_list[i] / (screen_vertex_list[i].z / (double)(INT_MAX - screen_vertex_list[i].z) + 1.0);
 	}
@@ -86,6 +109,46 @@ bool Render::PopMatrix() {
 void Render::AddLight(const Light &light) {
 	if (num_lights_ < kMaxLights) 
 		lights_[num_lights_++] = light;
+}
+
+void Render::BeginAASampling() { //use it after all set
+	double aa_filter[kSamplingNum][3] = { // x_offset, y_offset, weight
+		{ -0.52, 0.38, 0.128 },
+		{ 0.41, 0.56, 0.119 },
+		{ 0.27, 0.08, 0.294 },
+		{ -0.17, -0.29, 0.249 },
+		{ 0.58, -0.55, 0.104 },
+		{ -0.31, -0.71, 0.106 }
+	};
+	//Render* sample_renders = (Render*)malloc(sizeof(Render) * kSamplingNum);
+	Render* sample_renders = new Render[kSamplingNum];
+	for (int i = 0; i < kSamplingNum; ++i) {
+		memcpy(&(sample_renders[i]), this, sizeof(Render));
+		sample_renders[i].set_sample_render_flag(true);
+		sample_renders[i].set_x_offset(aa_filter[i][0]);
+		sample_renders[i].set_y_offset(aa_filter[i][1]);
+		sample_renders[i].set_weight(aa_filter[i][2]);
+		Display *display = new Display(display_->x_resolution(), display_->x_resolution());
+		display->Init();
+		sample_renders[i].display_ = display;
+	}
+	aa_flag_ = true;
+	sample_renders_ = sample_renders;
+}
+
+void Render::AASampling() {
+	for (int x = 0; x < display_->x_resolution(); ++x) {
+		for (int y = 0; y < display_->y_resolution(); ++y) {
+			Pixel &pixel = display_->GetPixel(x, y);
+			pixel.r = pixel.g = pixel.b = 0.0;
+			for (int i = 0; i < kSamplingNum; ++i) {
+				Pixel &sample_pixel = sample_renders_[i].display_->GetPixel(x, y);
+				pixel.r += sample_renders_[i].weight_ * sample_pixel.r;
+				pixel.g += sample_renders_[i].weight_ * sample_pixel.g;
+				pixel.b += sample_renders_[i].weight_ * sample_pixel.b;
+			}
+		}
+	}
 }
 
 Vector Render::Shade2(const Vector &normal) {

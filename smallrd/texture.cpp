@@ -13,8 +13,12 @@ Texture::Texture(const int mode)
 	  y_resolution_(0),
 	  image_(NULL), 
 	  reset_(true) {
-	if (mode == kImage) texture_function_ = ImageTexture;
-	else if (mode == kProcedural) texture_function_ = ProceduralTexture;
+	if (mode == kImage) texture_function_ = &Texture::ImageTexture;
+	else if (mode == kProcedural) texture_function_ = &Texture::ProceduralTexture;
+}
+
+Texture::~Texture() {
+	delete[] image_;
 }
 
 int Texture::GetColorByUV(const Vector &uv, Vector &color) {

@@ -7,7 +7,7 @@
 
 namespace smallrd {
 
-inline double DegreeToRadian(const double angle) { return angle * M_PI / 180.0; }
+inline double DegreeToRadian(const double angle) { return angle * (M_PI / 180.0); }
 
 
 } // namespace smallrd

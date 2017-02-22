@@ -11,6 +11,10 @@ Display::Display(const int xres, const int yres) {
 	frame_buf_ = new Pixel[y_resolution_ * x_resolution_];
 }
 
+Display::~Display() {
+	if(frame_buf_ != NULL) delete[] frame_buf_;
+}
+
 void Display::Init() {
 	// background color: steel blue 2
 	short r = ColorToShortType(92.0 / 255.0), g = ColorToShortType(172.0 / 255.0), b = ColorToShortType(238.0 / 255.0);

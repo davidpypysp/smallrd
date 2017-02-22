@@ -21,7 +21,7 @@ Camera::Camera(const Vector &position, const Vector &look_at, const Vector &worl
 	};
 
 	Vector row_z = (look_at - position).Normalize();
-	Vector row_y = (world_up - row_z * (world_up * row_z));
+	Vector row_y = (world_up - row_z * (world_up * row_z)).Normalize();
 	Vector row_x = row_y % row_z;
 	x_iw = {
 		{ row_x.x, row_x.y, row_x.z, -(row_x * position) },

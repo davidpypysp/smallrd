@@ -17,6 +17,7 @@ struct Pixel {
 class Display {
 public:
 	Display(const int xres, const int yres);
+	~Display();
 
 	void Init();
 

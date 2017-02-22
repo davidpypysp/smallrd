@@ -37,7 +37,8 @@ int main(int argc, char *argv[]) {
 	//renderer.RenderScene();
 	//renderer.RenderScene2();
 	//renderer.RenderScene3();
-	renderer.RenderScene4();
+	//renderer.RenderScene4();
+	renderer.RenderScene5();
 	system("pause");
 	return 0;
 }
