@@ -35,7 +35,7 @@ Pixel& Display::GetPixel(const int x, const int y) {
 
 void Display::FlushToFile(FILE* out_file) {
 	fprintf(out_file, "P6 %d %d 255\r", x_resolution_, y_resolution_);
-	for (int i = 0; i < x_resolution_ * y_resolution_; i++) {
+	for (int i = 0; i < x_resolution_ * y_resolution_; ++i) {
 		Pixel pixel = frame_buf_[i];
 		short r = (int)pixel.r >> 4, g = (int)pixel.g >> 4, b = (int)pixel.b >> 4;
 		fprintf(out_file, "%c%c%c", r, g, b);

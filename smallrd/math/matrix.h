@@ -59,6 +59,14 @@ struct Matrix {
 		return result;
 	}
 
+	inline Matrix Matrix::operator * (const double k) {
+		Matrix result;
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) result.value[i][j] = value[i][j] * k;
+		}
+		return result;
+	}
+
 	inline Quaternion operator * (const Quaternion &b) {
 		Quaternion result(
 			value[0][0] * b.x + value[0][1] * b.y + value[0][2] * b.z + value[0][3] * b.w,

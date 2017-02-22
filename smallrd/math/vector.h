@@ -24,6 +24,7 @@ struct Vector {
 	inline Vector operator * (const double b) const { return Vector(x*b, y*b, z*b); }
 	inline double operator * (const Vector &b) const { return x*b.x + y*b.y + z*b.z; } // dot product
 	inline Vector operator % (const Vector &b) const { return Vector(y*b.z - z*b.y, z*b.x - x*b.z, x*b.y - y*b.x); } // cross product
+	inline Vector operator / (const double b) const { return Vector(x / b, y / b, z / b); }
 	inline Vector& operator = (const Vector &b) { x = b.x; y = b.y; z = b.z; return *this; }
 	inline Vector& Normalize() { return *this = *this * (1.0 / sqrt(x*x + y*y + z*z)); }
 	inline Vector Multiply(const Vector &b) const { return Vector(x*b.x, y*b.y, z*b.z); }
@@ -36,10 +37,6 @@ struct Vector {
 		default: assert("Vector index out of range!");
 		}
 	}
-
-
-
-
 
 };
 

@@ -117,6 +117,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="render.cpp" />
     <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
@@ -127,6 +128,7 @@
     <ClInclude Include="math\quaternion.h" />
     <ClInclude Include="math\vector.h" />
     <ClInclude Include="render.h" />
+    <ClInclude Include="texture.h" />
     <ClInclude Include="utility.h" />
     <ClInclude Include="renderer.h" />
   </ItemGroup>

@@ -24,8 +24,8 @@ public:
 	Pixel& GetPixel(const int x, const int y);
 	void FlushToFile(FILE* out_file);
 
-	int x_resolution() const { return x_resolution_; }
-	int y_resolution() const { return y_resolution_; }
+	inline int x_resolution() const { return x_resolution_; }
+	inline int y_resolution() const { return y_resolution_; }
 
 
 private:

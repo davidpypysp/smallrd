@@ -60,7 +60,7 @@ void Renderer::RenderScene2() {
 			&(normal_list[2].x), &(normal_list[2].y), &(normal_list[2].z),
 			&(uv_list[2].x), &(uv_list[2].y));
 
-		render->PutTriangle(vertex_list, normal_list);
+		render->PutTriangle(vertex_list, normal_list, uv_list);
 	}
 
 	display->FlushToFile(out_file);
@@ -113,7 +113,7 @@ void Renderer::RenderScene3() {
 			&(normal_list[2].x), &(normal_list[2].y), &(normal_list[2].z),
 			&(uv_list[2].x), &(uv_list[2].y));
 
-		render->PutTriangle(vertex_list, normal_list);
+		render->PutTriangle(vertex_list, normal_list, uv_list);
 	}
 
 	display->FlushToFile(out_file);
@@ -132,6 +132,7 @@ void Renderer::RenderScene4() {
 	render->AddLight({ { 0, -0.7071, -0.7071 },{ 0.9, 0.2, 0.3 } });
 	render->AddLight({ { 0.7071, 0.0, -0.7071 },{ 0.2, 0.7, 0.3 } });
 	render->set_ambient_light({ { 0, 0, 0 },{ 0.3, 0.3, 0.3 } });
+
 	render->set_interpolation_mode(Render::kNormals);
 	render->set_ks(Vector(0.3, 0.3, 0.3));
 	render->set_ka(Vector(0.1, 0.1, 0.1));
@@ -179,7 +180,7 @@ void Renderer::RenderScene4() {
 			&(normal_list[2].x), &(normal_list[2].y), &(normal_list[2].z),
 			&(uv_list[2].x), &(uv_list[2].y));
 
-		render->PutTriangle(vertex_list, normal_list);
+		render->PutTriangle(vertex_list, normal_list, uv_list);
 	}
 
 	display->FlushToFile(out_file);
