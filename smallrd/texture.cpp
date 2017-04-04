@@ -28,13 +28,13 @@ int Texture::GetColorByUV(const Vector &uv, Vector &color) {
 int Texture::ImageTexture(const Vector &uv, Vector &color) {
 	if (reset_) {          /* open and load texture file */
 		FILE *in_file;
-		in_file = fopen("texture", "rb");
+		fopen_s(&in_file, "texture", "rb");
 		if (in_file == NULL) {
 			fprintf(stderr, "texture file not found\n");
 			exit(-1);
 		}
 		unsigned char foo[8], dummy;
-		fscanf(in_file, "%s %d %d %c", foo, &x_resolution_, &y_resolution_, &dummy);
+		fscanf_s(in_file, "%s %d %d %c", foo, &x_resolution_, &y_resolution_, &dummy);
 		//image_ = (Vector*)malloc(sizeof(Vector) * (x_resolution_ + 1) * (y_resolution_ + 1));
 		image_ = new Vector[(x_resolution_ + 1) * (y_resolution_ + 1)];
 		if (image_ == NULL) {
